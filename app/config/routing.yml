@@ -8,6 +8,11 @@ part_keepr_octopart:
     type:     annotation
     prefix:   /
 
+part_keepr_lcsc:
+    resource: "@PartKeeprLCSCBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 part_keepr_core:
     resource: "@PartKeeprCoreBundle/Controller/"
     type:     annotation

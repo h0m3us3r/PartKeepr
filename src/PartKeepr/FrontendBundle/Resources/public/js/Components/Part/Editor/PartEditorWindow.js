@@ -67,6 +67,12 @@ Ext.define('PartKeepr.PartEditorWindow', {
             handler: Ext.bind(this.onOctoPartClick, this)
         });
 
+        this.lcscButton = Ext.create("Ext.button.Button", {
+            text: i18n("LCSC…"),
+            iconCls: 'partkeepr-icon lcsc',
+            handler: Ext.bind(this.onLCSCClick, this)
+        });
+
         this.saveButton = Ext.create("Ext.button.Button", {
             text: this.saveText,
             iconCls: 'fugue-icon disk',
@@ -85,7 +91,7 @@ Ext.define('PartKeepr.PartEditorWindow', {
             dock: 'bottom',
             ui: 'footer',
             pack: 'start',
-            items: [this.saveButton, this.cancelButton, this.octoPartButton]
+            items: [this.saveButton, this.cancelButton, this.octoPartButton, this.lcscButton]
         });
 
         this.dockedItems = [this.bottomToolbar];
@@ -137,18 +143,28 @@ Ext.define('PartKeepr.PartEditorWindow', {
     onOctoPartClick: function () {
         if (PartKeepr.isOctoPartAvailable()) {
             this.editor.getForm().updateRecord();
-            this.octoPartQueryWindow = Ext.create("PartKeepr.Components.OctoPart.SearchWindow");
-            this.octoPartQueryWindow.show();
-            this.octoPartQueryWindow.setPart(this.editor.record);
-            this.octoPartQueryWindow.startSearch(this.editor.nameField.getValue());
-            this.octoPartQueryWindow.on("refreshData", this.onRefreshData, this);
+            this.searchWindow = Ext.create("PartKeepr.Components.OctoPart.SearchWindow");
+            this.searchWindow.show();
+            this.searchWindow.setPart(this.editor.record);
+            if (this.editor.nameField.getValue() !== "")
+                this.searchWindow.startSearch(this.editor.nameField.getValue());
+            this.searchWindow.on("refreshData", this.onRefreshData, this);
         } else {
             Ext.MessageBox.alert(i18n("Octopart is not configured"), i18n("Your administrator needs to configure the API key for Octopart in the parameters.php file - see parameters.php.dist for instructions"));
         }
     },
+    onLCSCClick: function () {
+        this.editor.getForm().updateRecord();
+        this.searchWindow = Ext.create("PartKeepr.Components.LCSC.SearchWindow");
+        this.searchWindow.show();
+        this.searchWindow.setPart(this.editor.record);
+        if (this.editor.nameField.getValue() !== "")
+            this.searchWindow.startSearch(this.editor.nameField.getValue());
+        this.searchWindow.on("refreshData", this.onRefreshData, this);
+    },
     onRefreshData: function () {
         this.editor.getForm().loadRecord(this.editor.record);
-        this.octoPartQueryWindow.destroy();
+        this.searchWindow.destroy();
     },
     /**
      * Called when the save button was clicked
