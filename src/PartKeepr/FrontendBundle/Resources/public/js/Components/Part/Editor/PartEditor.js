@@ -17,35 +17,35 @@ Ext.define('PartKeepr.PartEditor', {
     /**
      * Initializes the editor fields
      */
-    initComponent: function ()
-    {
+    initComponent: function () {
         // Defines the overall height of all fields, used to calculate the anchoring for the description field
-        var overallHeight = (this.partMode == "create") ? 320: 265;
+        var overallHeight = this.partMode == 'create' ? 320 : 265;
 
-        this.nameField = Ext.create("Ext.form.field.Text", {
+        this.nameField = Ext.create('Ext.form.field.Text', {
             name: 'name',
-            fieldLabel: i18n("Name"),
+            fieldLabel: i18n('Name'),
             allowBlank: false,
             labelWidth: 150
         });
 
-        this.storageLocationComboBox = Ext.create("PartKeepr.StorageLocationPicker",
+        this.storageLocationComboBox = Ext.create(
+            'PartKeepr.StorageLocationPicker',
             {
-                fieldLabel: i18n("Storage Location"),
+                fieldLabel: i18n('Storage Location'),
                 name: 'storageLocation',
                 allowBlank: false,
                 labelWidth: 150
-            });
+            }
+        );
 
-        this.footprintNone = Ext.create("Ext.form.field.Radio", {
-            boxLabel: i18n("None"),
+        this.footprintNone = Ext.create('Ext.form.field.Radio', {
+            boxLabel: i18n('None'),
             name: 'footprint_mode',
-            value: "unset",
+            value: 'unset',
             width: 70,
             listeners: {
                 scope: this,
-                change: function (field, newValue)
-                {
+                change: function (field, newValue) {
                     if (newValue === true) {
                         this.footprintComboBox.clearValue();
                     }
@@ -53,10 +53,10 @@ Ext.define('PartKeepr.PartEditor', {
             }
         });
 
-        this.footprintSet = Ext.create("Ext.form.field.Radio", {
+        this.footprintSet = Ext.create('Ext.form.field.Radio', {
             name: 'footprint_mode',
             width: 20,
-            value: "set"
+            value: 'set'
         });
 
         /*
@@ -65,15 +65,14 @@ Ext.define('PartKeepr.PartEditor', {
          * to support "null" values, however, this is a major change within ExtJS and probably not supported for
          * updates of ExtJS.
          */
-        this.footprintComboBox = Ext.create("PartKeepr.FootprintComboBox", {
+        this.footprintComboBox = Ext.create('PartKeepr.FootprintComboBox', {
             name: 'footprint',
             returnObject: true,
             flex: 1,
             listeners: {
                 scope: this,
-                change: function (field, newValue)
-                {
-                    if (typeof(newValue) === 'object') {
+                change: function (field, newValue) {
+                    if (typeof newValue === 'object') {
                         this.footprintSet.setValue(true);
                     }
                 }
@@ -85,14 +84,15 @@ Ext.define('PartKeepr.PartEditor', {
             this.nameField,
             {
                 xtype: 'textfield',
-                fieldLabel: i18n("Description"),
-                allowBlank: this.isOptional("description"),
+                fieldLabel: i18n('Description'),
+                allowBlank: this.isOptional('description'),
                 name: 'description'
-            }, {
+            },
+            {
                 layout: 'column',
                 xtype: 'fieldcontainer',
                 margin: {
-                    bottom: "0 5px 5px 0"
+                    bottom: '0 5px 5px 0'
                 },
                 border: false,
                 items: [
@@ -106,28 +106,30 @@ Ext.define('PartKeepr.PartEditor', {
                         value: 0,
                         columnWidth: 0.5,
                         minValue: 0
-                    }, {
-                        padding: "0 0 0 5px",
+                    },
+                    {
+                        padding: '0 0 0 5px',
                         xtype: 'PartUnitComboBox',
-                        fieldLabel: i18n("Measurement Unit"),
+                        fieldLabel: i18n('Measurement Unit'),
                         labelWidth: 120,
                         columnWidth: 0.5,
                         returnObject: true,
                         name: 'partUnit'
                     }
                 ]
-            }, {
+            },
+            {
                 xtype: 'CategoryComboBox',
-                fieldLabel: i18n("Category"),
+                fieldLabel: i18n('Category'),
                 name: 'category',
-                displayField: "name",
+                displayField: 'name',
                 returnObject: true
             },
             this.storageLocationComboBox,
             {
                 xtype: 'fieldcontainer',
                 layout: 'hbox',
-                fieldLabel: i18n("Footprint"),
+                fieldLabel: i18n('Footprint'),
                 defaults: {
                     hideLabel: true
                 },
@@ -136,63 +138,70 @@ Ext.define('PartKeepr.PartEditor', {
                     this.footprintSet,
                     this.footprintComboBox
                 ]
-            }, {
+            },
+            {
                 xtype: 'textarea',
-                fieldLabel: i18n("Comment"),
+                fieldLabel: i18n('Comment'),
                 name: 'comment',
-                allowBlank: this.isOptional("comment"),
+                allowBlank: this.isOptional('comment'),
                 anchor: '100% ' + (-overallHeight).toString()
             },
             {
                 xtype: 'textfield',
-                fieldLabel: i18n("Production Remarks"),
+                fieldLabel: i18n('Production Remarks'),
                 name: 'productionRemarks',
-                allowBlank: this.isOptional("productionRemarks"),
-            },{
+                allowBlank: this.isOptional('productionRemarks')
+            },
+            {
                 xtype: 'fieldcontainer',
                 layout: 'hbox',
-                fieldLabel: i18n("Status"),
+                fieldLabel: i18n('Status'),
                 defaults: {
                     hideLabel: true
                 },
                 items: [
                     {
                         xtype: 'textfield',
-                        fieldLabel: i18n("Status"),
+                        fieldLabel: i18n('Status'),
                         flex: 1,
-                        allowBlank: this.isOptional("status"),
+                        allowBlank: this.isOptional('status'),
                         name: 'status'
-                    }, {
+                    },
+                    {
                         xtype: 'checkbox',
                         hideEmptyLabel: false,
                         fieldLabel: '',
-                        boxLabel: i18n("Needs Review"),
+                        boxLabel: i18n('Needs Review'),
                         name: 'needsReview'
                     }
                 ]
-            }, {
+            },
+            {
                 xtype: 'textfield',
-                fieldLabel: i18n("Condition"),
+                fieldLabel: i18n('Condition'),
                 name: 'partCondition',
-                allowBlank: this.isOptional("partCondition"),
-            }, {
+                allowBlank: this.isOptional('partCondition')
+            },
+            {
                 xtype: 'fieldcontainer',
                 layout: 'hbox',
                 items: [
                     {
                         xtype: 'textfield',
                         labelWidth: 150,
-                        fieldLabel: i18n("Internal Part Number"),
+                        fieldLabel: i18n('Internal Part Number'),
                         name: 'internalPartNumber',
-                        allowBlank: this.isOptional("internalPartNumber"),
+                        allowBlank: this.isOptional('internalPartNumber'),
                         flex: 1
-                    }, {
+                    },
+                    {
                         xtype: 'displayfield',
-                        qtip: i18n("The first number is the ID in decimal, the second number is the ID in base36"),
-                        fieldLabel: i18n("Internal ID"),
+                        qtip: i18n(
+                            'The first number is the ID in decimal, the second number is the ID in base36'
+                        ),
+                        fieldLabel: i18n('Internal ID'),
                         listeners: {
-                            render: function (c)
-                            {
+                            render: function (c) {
                                 Ext.QuickTips.register({
                                     target: c.getEl(),
                                     text: c.qtip
@@ -202,62 +211,63 @@ Ext.define('PartKeepr.PartEditor', {
                         itemId: 'idField',
                         name: '@id',
                         fieldStyle: {
-                            color: "blue",
-                            "text-decoration": "underline",
+                            color: 'blue',
+                            'text-decoration': 'underline'
                         },
-                        renderer: function (value)
-                        {
-                            var values = value.split("/");
+                        renderer: function (value) {
+                            var values = value.split('/');
                             var idstr = values[values.length - 1];
                             var idint = parseInt(idstr);
 
-                            return idstr + " (#" + idint.toString(36) + ")";
+                            return idstr + ' (#' + idint.toString(36) + ')';
                         }
                     }
                 ]
-
             }
         ];
 
         // Creates the distributor grid
-        this.partDistributorGrid = Ext.create("PartKeepr.PartDistributorGrid", {
-            title: i18n("Distributors"),
+        this.partDistributorGrid = Ext.create('PartKeepr.PartDistributorGrid', {
+            title: i18n('Distributors'),
             iconCls: 'web-icon lorry',
             layout: 'fit'
         });
 
         // Creates the manufacturer grid
-        this.partManufacturerGrid = Ext.create("PartKeepr.PartManufacturerGrid", {
-            title: i18n("Manufacturers"),
-            iconCls: 'fugue-icon building',
-            layout: 'fit'
-        });
+        this.partManufacturerGrid = Ext.create(
+            'PartKeepr.PartManufacturerGrid',
+            {
+                title: i18n('Manufacturers'),
+                iconCls: 'fugue-icon building',
+                layout: 'fit'
+            }
+        );
 
-        // Creates the attachment grid
-        this.partParameterGrid = Ext.create("PartKeepr.PartParameterGrid", {
-            title: i18n("Part Parameters"),
+        // Creates the parameter grid
+        this.partParameterGrid = Ext.create('PartKeepr.PartParameterGrid', {
+            title: i18n('Part Parameters'),
             iconCls: 'fugue-icon table',
             layout: 'fit'
         });
 
         // Creates the attachment grid
-        this.partAttachmentGrid = Ext.create("PartKeepr.PartAttachmentGrid", {
-            title: i18n("Attachments"),
+        this.partAttachmentGrid = Ext.create('PartKeepr.PartAttachmentGrid', {
+            title: i18n('Attachments'),
             iconCls: 'web-icon attach',
             layout: 'fit'
         });
 
         // Adds stock level fields for new items
-        if (this.partMode && this.partMode == "create") {
-            this.initialStockLevel = Ext.create("Ext.form.field.Number", {
-                fieldLabel: i18n("Initial Stock Level"),
-                name: "initialStockLevel",
+        if (this.partMode && this.partMode == 'create') {
+            this.initialStockLevel = Ext.create('Ext.form.field.Number', {
+                fieldLabel: i18n('Initial Stock Level'),
+                name: 'initialStockLevel',
                 labelWidth: 150,
                 columnWidth: 0.5
             });
 
-            this.initialStockLevelUser = Ext.create("PartKeepr.UserComboBox", {
-                fieldLabel: i18n("Stock User"),
+            this.initialStockLevelUser = Ext.create('PartKeepr.UserComboBox', {
+                fieldLabel: i18n('Stock User'),
                 name: 'initialStockLevelUser',
                 columnWidth: 0.5,
                 returnObject: true
@@ -267,24 +277,27 @@ Ext.define('PartKeepr.PartEditor', {
                 xtype: 'container',
                 layout: 'column',
                 border: false,
-                items: [
-                    this.initialStockLevel,
-                    this.initialStockLevelUser
-                ]
+                items: [this.initialStockLevel, this.initialStockLevelUser]
             });
 
-            this.initialStockLevelPrice = Ext.create("PartKeepr.CurrencyField", {
-                fieldLabel: i18n('Price'),
-                labelWidth: 150,
-                columnWidth: 0.5,
-                name: 'initialStockLevelPrice'
-            });
+            this.initialStockLevelPrice = Ext.create(
+                'PartKeepr.CurrencyField',
+                {
+                    fieldLabel: i18n('Price'),
+                    labelWidth: 150,
+                    columnWidth: 0.5,
+                    name: 'initialStockLevelPrice'
+                }
+            );
 
-            this.initialStockLevelPricePerItem = Ext.create("Ext.form.field.Checkbox", {
-                boxLabel: i18n("Per Item"),
-                columnWidth: 0.5,
-                name: 'initialStockLevelPricePerItem'
-            });
+            this.initialStockLevelPricePerItem = Ext.create(
+                'Ext.form.field.Checkbox',
+                {
+                    boxLabel: i18n('Per Item'),
+                    columnWidth: 0.5,
+                    name: 'initialStockLevelPricePerItem'
+                }
+            );
 
             basicEditorFields.push({
                 xtype: 'container',
@@ -295,8 +308,6 @@ Ext.define('PartKeepr.PartEditor', {
                     this.initialStockLevelPricePerItem
                 ]
             });
-
-
         }
 
         // Create a tab panel of all fields
@@ -314,7 +325,7 @@ Ext.define('PartKeepr.PartEditor', {
                         anchor: '100%',
                         labelWidth: 150
                     },
-                    title: i18n("Basic Data"),
+                    title: i18n('Basic Data'),
                     items: basicEditorFields
                 },
                 this.partDistributorGrid,
@@ -324,14 +335,19 @@ Ext.define('PartKeepr.PartEditor', {
             ]
         };
 
-        this.on("startEdit", this.onEditStart, this, {delay: 200});
-        this.on("itemSaved", this._onItemSaved, this);
+        this.on('startEdit', this.onEditStart, this, { delay: 200 });
+        this.on('itemSaved', this._onItemSaved, this);
 
         this.callParent();
 
-        this.on("itemSave", this.onItemSave, this);
-        this.down("#idField").on("beforedestroy", this.onBeforeDestroy, this.down("#idField"));
+        this.on('itemSave', this.onItemSave, this);
+        this.down('#idField').on(
+            'beforedestroy',
+            this.onBeforeDestroy,
+            this.down('#idField')
+        );
 
+        this.nameField.on('change', this.checkBarcode, this, { buffer: 300 });
     },
     /**
      * Unregisters the quick tip immediately prior destroying
@@ -342,15 +358,22 @@ Ext.define('PartKeepr.PartEditor', {
     /**
      * Cleans up the record prior saving.
      */
-    onItemSave: function ()
-    {
-        var removeRecords = [], j, errors = [],
+    onItemSave: function () {
+        var removeRecords = [],
+            j,
+            errors = [],
             minDistributorCount = PartKeepr.getApplication().getSystemPreference(
-                "partkeepr.part.constraints.distributorCount", 0),
+                'partkeepr.part.constraints.distributorCount',
+                0
+            ),
             minManufacturerCount = PartKeepr.getApplication().getSystemPreference(
-                "partkeepr.part.constraints.manufacturerCount", 0),
+                'partkeepr.part.constraints.manufacturerCount',
+                0
+            ),
             minAttachmentCount = PartKeepr.getApplication().getSystemPreference(
-                "partkeepr.part.constraints.attachmentCount", 0);
+                'partkeepr.part.constraints.attachmentCount',
+                0
+            );
 
         /**
          * Iterate through all records and check if a valid distributor
@@ -369,7 +392,11 @@ Ext.define('PartKeepr.PartEditor', {
 
         if (this.record.distributors().getCount() < minDistributorCount) {
             errors.push(
-                Ext.String.format(i18n("The number of distributors must be greater than {0}"), minDistributorCount));
+                Ext.String.format(
+                    i18n('The number of distributors must be greater than {0}'),
+                    minDistributorCount
+                )
+            );
         }
 
         removeRecords = [];
@@ -392,12 +419,22 @@ Ext.define('PartKeepr.PartEditor', {
 
         if (this.record.manufacturers().getCount() < minManufacturerCount) {
             errors.push(
-                Ext.String.format(i18n("The number of manufacturers must be greater than {0}"), minManufacturerCount));
+                Ext.String.format(
+                    i18n(
+                        'The number of manufacturers must be greater than {0}'
+                    ),
+                    minManufacturerCount
+                )
+            );
         }
 
         if (this.record.attachments().getCount() < minAttachmentCount) {
             errors.push(
-                Ext.String.format(i18n("The number of attachments must be greater than {0}"), minAttachmentCount));
+                Ext.String.format(
+                    i18n('The number of attachments must be greater than {0}'),
+                    minAttachmentCount
+                )
+            );
         }
 
         // Force footprint to be "null" when the checkbox is checked.
@@ -409,14 +446,23 @@ Ext.define('PartKeepr.PartEditor', {
             var initialStockLevel = this.initialStockLevel.getValue();
 
             if (this.record.phantom && initialStockLevel > 0) {
-                var stockLevel = Ext.create("PartKeepr.StockBundle.Entity.StockEntry");
-                stockLevel.set("stockLevel", initialStockLevel);
+                var stockLevel = Ext.create(
+                    'PartKeepr.StockBundle.Entity.StockEntry'
+                );
+                stockLevel.set('stockLevel', initialStockLevel);
                 stockLevel.setUser(this.initialStockLevelUser.getValue());
 
                 if (this.initialStockLevelPricePerItem.getValue() === false) {
-                    stockLevel.set("price", this.initialStockLevelPrice.getValue() / initialStockLevel);
+                    stockLevel.set(
+                        'price',
+                        this.initialStockLevelPrice.getValue() /
+                            initialStockLevel
+                    );
                 } else {
-                    stockLevel.set("price", this.initialStockLevelPrice.getValue());
+                    stockLevel.set(
+                        'price',
+                        this.initialStockLevelPrice.getValue()
+                    );
                 }
 
                 this.record.stockLevels().add(stockLevel);
@@ -424,12 +470,11 @@ Ext.define('PartKeepr.PartEditor', {
         }
 
         if (errors.length > 0) {
-            Ext.Msg.alert(i18n("Error"), errors.join("<br/>"));
+            Ext.Msg.alert(i18n('Error'), errors.join('<br/>'));
             return false;
         }
     },
-    onEditStart: function ()
-    {
+    onEditStart: function () {
         this.bindChildStores();
         this.nameField.focus();
 
@@ -447,30 +492,35 @@ Ext.define('PartKeepr.PartEditor', {
             this.footprintNone.setValue(true);
         }
     },
-    _onItemSaved: function ()
-    {
-        this.fireEvent("partSaved", this.record);
+    _onItemSaved: function () {
+        this.fireEvent('partSaved', this.record);
 
-        if (this.keepOpenCheckbox.getValue() !== true && this.createCopyCheckbox.getValue() !== true) {
-            this.fireEvent("editorClose", this);
+        if (
+            this.keepOpenCheckbox.getValue() !== true &&
+            this.createCopyCheckbox.getValue() !== true
+        ) {
+            this.fireEvent('editorClose', this);
         } else {
             var newItem, data;
 
-            if (this.partMode == "create") {
+            if (this.partMode == 'create') {
                 if (this.copyPartDataCheckbox.getValue() === true) {
                     data = this.record.getData();
-                    delete data["@id"];
+                    delete data['@id'];
 
-                    newItem = Ext.create("PartKeepr.PartBundle.Entity.Part");
+                    newItem = Ext.create('PartKeepr.PartBundle.Entity.Part');
                     newItem.set(data);
-                    newItem.setAssociationData(this.record.getAssociationData());
+                    newItem.setAssociationData(
+                        this.record.getAssociationData()
+                    );
                     newItem.stockLevels().removeAll();
-                    newItem.set("stockLevel", 0);
+                    newItem.set('stockLevel', 0);
                     this.editItem(newItem);
-
                 } else {
-                    newItem = Ext.create("PartKeepr.PartBundle.Entity.Part");
-                    newItem.setPartUnit(PartKeepr.getApplication().getDefaultPartUnit());
+                    newItem = Ext.create('PartKeepr.PartBundle.Entity.Part');
+                    newItem.setPartUnit(
+                        PartKeepr.getApplication().getDefaultPartUnit()
+                    );
 
                     newItem.setCategory(this.record.getCategory());
 
@@ -478,17 +528,16 @@ Ext.define('PartKeepr.PartEditor', {
                 }
             } else {
                 data = this.record.getData();
-                delete data["@id"];
+                delete data['@id'];
 
-                newItem = Ext.create("PartKeepr.PartBundle.Entity.Part");
+                newItem = Ext.create('PartKeepr.PartBundle.Entity.Part');
                 newItem.set(data);
                 newItem.setAssociationData(this.record.getAssociationData());
                 this.editItem(newItem);
             }
         }
     },
-    bindChildStores: function ()
-    {
+    bindChildStores: function () {
         this.partDistributorGrid.bindStore(this.record.distributors());
         this.partManufacturerGrid.bindStore(this.record.manufacturers());
         this.partAttachmentGrid.bindStore(this.record.attachments());
@@ -501,30 +550,49 @@ Ext.define('PartKeepr.PartEditor', {
         this.record.parameters().rejectChanges();
         this.callParent(arguments);
     },
-    setTitle: function (title)
-    {
+    setTitle: function (title) {
         var tmpTitle;
 
         if (this.record.phantom) {
-            tmpTitle = i18n("Add Part");
+            tmpTitle = i18n('Add Part');
         } else {
-            tmpTitle = i18n("Edit Part");
+            tmpTitle = i18n('Edit Part');
         }
 
-        if (title !== "") {
-            tmpTitle = tmpTitle + ": " + title;
+        if (title !== '') {
+            tmpTitle = tmpTitle + ': ' + title;
         }
 
-        this.fireEvent("_titleChange", tmpTitle);
+        this.fireEvent('_titleChange', tmpTitle);
     },
-    isOptional: function (field)
-    {
-        var fields = PartKeepr.getApplication().getSystemPreference("partkeepr.part.requiredFields", []);
+    isOptional: function (field) {
+        var fields = PartKeepr.getApplication().getSystemPreference(
+            'partkeepr.part.requiredFields',
+            []
+        );
 
         if (Ext.Array.contains(fields, field)) {
             return false;
         } else {
             return true;
         }
+    },
+    checkBarcode: function () {
+        let name = this.nameField.getValue();
+
+        let mpn = null;
+        let qty = null;
+        if (name.startsWith('>[)>') || name.startsWith('[)>')) {
+            //Mouser || DigiKey
+            if ((mpn = name.match(/{GS}1P(\w*)/))) mpn = mpn[1];
+            if ((qty = name.match(/{GS}Q(\w*)/))) qty = qty[1];
+        } else if (name.startsWith('{') && name.endsWith('}')) {
+            //LCSC
+            if ((mpn = name.match(/,pm:(\w*)/))) mpn = mpn[1];
+            if ((qty = name.match(/,qty:(\w*)/))) qty = qty[1];
+        }
+
+        if (mpn !== null) this.nameField.setValue(mpn);
+        if (qty !== null) this.initialStockLevel.setValue(qty);
     }
 });
